@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Time</title>
+    <link rel="manifest" href="manifest.json">
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+            console.log('Service Worker registered with scope:', registration.scope);
+        }).catch(function(error) {
+            console.log('Service Worker registration failed:', error);
+        });
+    }
+</script>
+
+</head>
+<body>
+    <h1>Random Time</h1>
+    <div id="time">Loading...</div>
+    <button onclick="fetchTime()">Refresh Time</button>
+
+    <script>
+        function fetchTime() {
+            fetch('http://127.0.0.1:5000/get_time')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('time').textContent = data.time;
+                })
+                .catch(error => {
+                    document.getElementById('time').textContent = 'Failed to fetch time';
+                    console.error('Error fetching time:', error);
+                });
+        }
+
+        // Fetch the time when the page loads
+        fetchTime();
+    </script>
+</body>
+</html>
